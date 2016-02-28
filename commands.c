@@ -46,10 +46,7 @@ void command()
     return;
 
   case '@':
-    if(wordLength == 1)
-      stackPush(position);
-    else
-      ; //TODO: add variables
+    stackPush(position);
     return;
 
   case '!': //TODO: test
