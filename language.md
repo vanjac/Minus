@@ -11,7 +11,7 @@ Before being run, a Minus program is preprocessed. The main purpose of the Minus
 - Lines that begin with a `#` are ignored (commented)
 - Lines that begin with a `$` and follow the pattern `$name value $` are treated as keyword definitions. If `name` (without the leading `$`) is found as a separate word (surrounded by whitespace) anywhere in the program past that point, it will be replaced with `value`. `value` can contain whitespace and even span multiple lines.
 - Lines that begin with a `` ` `` and follow the pattern `` `path/to/file `` are replaced with the contents of the file found at `path/to/file`. File paths follow Unix file path conventions. 
-- Strings surrounded by quotes `"like this"` are replaced with Minus code that allocates memory for the string, copies the characters to memory, and returns a pointer. This memory must be manually freed with `,` - see below. Escape characters can be used in strings with `\`'s. Allowed characters are `\a` (alarm) `\b` (backspace), `\f` (formfeed), `\n` (newline), `\r` (carriage return), `\t` (tab), `\v` (vertical tab), `\\` (backslash), and `\"` (double-quote).
+- Strings surrounded by quotes `"like this"` are replaced with Minus code that allocates memory for the string, copies the characters to memory, and returns a pointer. This memory must be manually freed with `,` - see below. Escape characters can be used in strings with `\`'s. Allowed characters are `\\` (backslash), `\"` (double-quote), and `\00`, where `00` is a sequence of 2 hex digits representing the ASCII character with that value.
 
 ##Minus Commands
 Once a Minus program has been preprocessed, execution begins starting with the first line of the program. These are the words understood by the interpreter.
