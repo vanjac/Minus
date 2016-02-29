@@ -34,4 +34,4 @@ Once a Minus program has been preprocessed, execution begins starting with the f
 - `,` removes a pointer from the stack and frees the memory it points to.
 - `..` removes a pointer and a number to the stack, and `realloc`'s the memory at that pointer to be the specified size. It adds a new pointer or the same pointer back onto the stack.
 - `^` removes a pointer from the stack and gets the number value at that memory location. 1 is a special location - `^ 1` returns the next character on the input stream. `^ 0` causes an error.
-- `:` removes a pointer and a number to the stack and puts the number at that memory location. The number is then added back onto the stack. 1 and 2 are special locations - `: 1 value` sends a character to the output stream, and `: 2 value` sends a character to the error stream. `: 0 value` causes an error.
+- `:` removes a pointer and a number from the stack and puts the number at that memory location. The number is then added back onto the stack. 1 and 2 are special locations - `: 1 value` sends a character to the output stream, and `: 2 value` sends a character to the error stream. `: 0 value` causes an error.

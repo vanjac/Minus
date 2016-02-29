@@ -11,6 +11,10 @@ int main(int argc, char * argv[])
   originalProgram = NULL;
   processedProgram = NULL;
   stack = NULL;
+
+  if(argc != 2) {
+    error("Minus takes a single argument: the program file to run.\n");
+  }
   
   readFile(argv[1]);
   process();

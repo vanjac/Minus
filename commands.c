@@ -38,13 +38,6 @@ void command()
     stackPopTest();
     return;
 
-  case '\'':
-    if(wordLength <= 1) //assume a space
-      stackPush(' ');
-    else
-      stackPush(word[1]);
-    return;
-
   case '@':
     stackPush(position);
     return;
@@ -82,6 +75,11 @@ void command()
       return;
     }
     programError("Not supported yet!");
+    return;
+
+  case '|':
+    programError("Not supported yet!");
+    return;
 
   case '.':
     if(wordLength == 1) {
