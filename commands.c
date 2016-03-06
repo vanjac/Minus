@@ -8,10 +8,28 @@ bool isNumber(char c); //if this could be the start of a number
 bool isDigit(char c);
 bool isLetter(char c);
 
+// the current state of the interpreter
+enum { READ, BRACKET_SKIP, BRACKET_READ } state;
+// READ: read/interpret commands normally
+// BRACKET_SKIP: skipping code inside brackets
+// BRACKET_READ: at start of namespace, running code inside brackets
+
+void commandInit()
+{
+  state = READ;
+}
+
+
 void command()
 {
   if(wordLength == 0)
     return;
+
+  if(state == BRACKET_SKIP) {
+    if(FIRST_WORD_CHAR == '[')
+      state = READ;
+    return;
+  }
   
   if(isNumber(FIRST_WORD_CHAR) && isDigit(LAST_WORD_CHAR)) {
     Number n = strtod(word, NULL);
@@ -79,11 +97,11 @@ void command()
     }
 
   case '[':
-    programError("Not supported yet!");
+    programError("Unmatched '[' !\n");
     return;
 
   case ']':
-    programError("Not supported yet!");
+    state = BRACKET_SKIP;
     return;
 
   case '.':

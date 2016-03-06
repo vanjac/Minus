@@ -58,6 +58,8 @@ void halt();
 void process();
 void runInit();
 void runStep();
+
+void commandInit();
 void command();
 
 bool nextLine(); //false if end of program
