@@ -6,6 +6,7 @@
 
 void runInit()
 {
+  commandInit();
   stackInit();
   namespaceInit();
   nextLine();
