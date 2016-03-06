@@ -55,45 +55,41 @@ void command()
   case ':': // set LOCATION to VALUE
     a = stackPopTest();
     b = stackPeekTest();
-    if(a <= 0)
+    if(a <= 0) {
       return;
-    if(a == 1) {
+    } else if(a == 1) {
       putchar(b);
       return;
-    }
-    if(a == 2) {
+    } else if(a == 2) {
       putc(b, stderr);
       return;
+    } else {
+      * numberToPointer(a) = b;
+      return;
     }
-    programError("Not supported yet!");
-    return;
 
   case '^':
     a = stackPopTest();
     if(a == 1) {
       stackPush(getchar());
       return;
+    } else {
+      stackPush( * numberToPointer(a) );
+      return;
     }
+
+  case '[':
     programError("Not supported yet!");
     return;
 
-  case '|':
+  case ']':
     programError("Not supported yet!");
     return;
 
   case '.':
-    if(wordLength == 1) {
-      a = stackPopTest();
-      stackPush(pointerToNumber( malloc(a * sizeof(Number)) ));
-      return;
-    } else if(wordLength == 2 && LAST_WORD_CHAR == '.') {
-      a = stackPopTest();
-      b = stackPopTest();
-      stackPush(pointerToNumber(
-	realloc( numberToPointer(a), b * sizeof(Number) )
-      ));
-      return;
-    }
+    a = stackPopTest();
+    stackPush(pointerToNumber( malloc(a * sizeof(Number)) ));
+    return;
 
   case ',':
     if(wordLength == 1) {
