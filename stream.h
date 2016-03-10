@@ -8,5 +8,5 @@ typedef struct {
   void * data;
 } OutStream;
 
-void sgetc(InStream stream);
+int sgetc(InStream in);
 void sputc(int c, OutStream out);
