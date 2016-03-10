@@ -8,9 +8,13 @@ bool isNumber(char c); //if this could be the start of a number
 bool isDigit(char c);
 bool isLetter(char c);
 
+int lastNamespacePosition;
+Namespace searchNamespace;
+
 // the current state of the interpreter
-enum { READ, BRACKET_SKIP, BRACKET_READ } state;
+enum { READ, BRACKET_SEARCH, BRACKET_SKIP, BRACKET_READ } state;
 // READ: read/interpret commands normally
+// BRACKET_SEARCH: search for bracketed code to read
 // BRACKET_SKIP: skipping code inside brackets
 // BRACKET_READ: at start of namespace, running code inside brackets
 
@@ -26,9 +30,32 @@ void command()
     return;
 
   if(state == BRACKET_SKIP) {
-    if(FIRST_WORD_CHAR == '[')
+    if(FIRST_WORD_CHAR == ']')
       state = READ;
     return;
+  }
+
+  if(state == BRACKET_SEARCH) {
+    switch(FIRST_WORD_CHAR) {
+    case '{':
+      searchNamespace++;
+      return;
+    case '}':
+      if(searchNamespace == 0) {
+	position = lastNamespacePosition;
+	state = READ;
+	return;
+      } else {
+	searchNamespace--;
+	return;
+      }
+    case '[':
+      if(searchNamespace == 0)
+	state = BRACKET_READ;
+      return;
+    default:
+      return;
+    }
   }
   
   if(isNumber(FIRST_WORD_CHAR) && isDigit(LAST_WORD_CHAR)) {
@@ -97,11 +124,12 @@ void command()
     }
 
   case '[':
-    programError("Unmatched '[' !\n");
+    state = BRACKET_SKIP;
     return;
 
   case ']':
-    state = BRACKET_SKIP;
+    if(state == BRACKET_READ)
+      state = BRACKET_SEARCH;
     return;
 
   case '.':
@@ -118,6 +146,9 @@ void command()
 
   case '{':
     incNamespace();
+    searchNamespace = 0;
+    lastNamespacePosition = position;
+    state = BRACKET_SEARCH;
     return;
   case '}':
     decNamespace();

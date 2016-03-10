@@ -22,7 +22,7 @@ Once a Minus program has been preprocessed, execution begins starting with the f
 - `varName` adds the value of the variable to the stack.
 - `{` increments the namespace counter by 1. Before execution continues, bracketed lines are searched for in the current namespace (but not subnamespaces) and executed - see below.
 - `}` decrements the namespace counter by 1, and deletes all variables associated with the namespace.
-- `[` and `]` characters on the same line surround code that should be run before anything else in the namespace. Once execution actually reaches this point, these sections are skipped. There can be any number of these lines in a namespace.
+- `[` and `]` characters mark the beginning and end of code that should be run before anything else in the namespace. Once execution actually reaches this point, these sections are skipped. There can be any number of these sections in a namespace.
 - `@` adds the program counter position to the stack.
 - `!` removes the top number on the stack and sets the program counter to that position. The first word there is skipped before execution continues.
 - `-` removes two stack items and subtracts the second from the first. The result is then added to the stack.
