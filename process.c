@@ -1,4 +1,5 @@
 #include "minus.h"
+#include "stream.h"
 
 void processAddChar(char c);
 bool isWhitespace(char c); //not including newlines
