@@ -6,6 +6,8 @@
 void processFile(FILE * file);
 
 bool isWhitespace(char c); //not including newlines
+bool isHex(char c); //is hex code
+char getHex(char c); //get hex value of character
 void processAddChar(char c);
 void processAddString(char * string, int maxLen);
 
@@ -69,9 +71,22 @@ void processFile(FILE * file)
       c = fgetc(file);
       while(c != EOF && c != '"') {
 	lineIsEmpty = FALSE;
+
+	char value = c;
+	if(c == '\\') {
+	  char c1 = fgetc(file);
+	  if(c1 == EOF)
+	    error("Unexpected EOF while reading escape character!\n");
+	  char c2 = fgetc(file);
+	  if(c2 == EOF)
+	    error("Unexpected EOF while reading escape character!\n");
+	  if(!isHex(c1) || !isHex(c2))
+	    error("Invalid hex code in escape character!\n");
+	  value = getHex(c1) * 16 + getHex(c2);
+	}
 	
         char cString[4];
-	sprintf(cString, "%d", c);
+	sprintf(cString, "%d", value);
 	processAddString(cString, sizeof(cString) / sizeof(char));
 	processAddChar(' ');
 	
@@ -106,6 +121,21 @@ bool isWhitespace(char c)
     return FALSE;
   }
 }
+
+bool isHex(char c)
+{
+  return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f');
+}
+
+char getHex(char c)
+{
+  if( c >= '0' && c <= '9' )
+    return c - '0';
+  if( c >= 'a' && c <= 'f' )
+    return c - 'a' + 10;
+  return -1;
+}
+
 
 void processAddChar(char c)
 {
