@@ -12,10 +12,7 @@ int main(int argc, char * argv[])
     error("Minus takes a single argument: the program file to run.\n");
   }
   
-  FILE * file;
-  file = fopen(argv[1], "r");
-  if(file == NULL)
-    error("Couldn't open file!\n");
+  FILE * file = readFile(argv[1]);
   process(file);
   fclose(file);
 
@@ -25,6 +22,15 @@ int main(int argc, char * argv[])
   while(1)
     runStep();
   
+}
+
+FILE * readFile(char * name)
+{
+  FILE * file;
+  file = fopen(name, "r");
+  if(file == NULL)
+    error("Couldn't open file!\n");
+  return file;
 }
 
 

@@ -54,19 +54,23 @@ void processFile(FILE * file)
 {
   int c;
   while((c = fgetc(file)) != EOF) {
+    
     if(isWhitespace(c)) {
       whitespace = TRUE;
     }
+    
     else if(c == '\n') {
       if(!lineIsEmpty)
 	processAddChar('\n');
       newline = TRUE;
       lineIsEmpty = TRUE;
     }
+    
     else if(c == '#' && lineIsEmpty) {
       while(c != EOF && c != '\n')
 	c = fgetc(file);
     }
+    
     else if(c == '"') {
       c = fgetc(file);
       while(c != EOF && c != '"') {
@@ -93,6 +97,23 @@ void processFile(FILE * file)
 	c = fgetc(file);
       }
     }
+
+    else if(c == '`') {
+      char fileName[256];
+      int i;
+      for(i = 0; i < sizeof(fileName)/sizeof(char) - 1; i++) {
+	c = fgetc(file);
+	if(c == EOF || c == '\n') {
+	  fileName[i] = 0;
+	  break;
+	}
+	fileName[i] = c;
+      }
+      fileName[sizeof(fileName)/sizeof(char)-1] = 0;
+      FILE * newFile = readFile(fileName);
+      processFile(newFile);
+    }
+    
     else {
       if(whitespace == TRUE && !lineIsEmpty)
 	processAddChar(' ');

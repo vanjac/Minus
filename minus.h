@@ -49,6 +49,8 @@ unsigned int stackMemorySize;
 
 unsigned long stringHash(unsigned char * string, int length);
 
+FILE * readFile(char * name);
+
 void closeAll();
 void error();
 void programError();
