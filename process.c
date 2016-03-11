@@ -72,30 +72,25 @@ void processFile(FILE * file)
     }
     
     else if(c == '"') {
+      if(whitespace == TRUE && !lineIsEmpty)
+	processAddChar(' ');
+      
       c = fgetc(file);
+      bool addWhitespace = FALSE;
       while(c != EOF && c != '"') {
 	lineIsEmpty = FALSE;
 
-	char value = c;
-	if(c == '\\') {
-	  char c1 = fgetc(file);
-	  if(c1 == EOF)
-	    error("Unexpected EOF while reading escape character!\n");
-	  char c2 = fgetc(file);
-	  if(c2 == EOF)
-	    error("Unexpected EOF while reading escape character!\n");
-	  if(!isHex(c1) || !isHex(c2))
-	    error("Invalid hex code in escape character!\n");
-	  value = getHex(c1) * 16 + getHex(c2);
-	}
+	if(addWhitespace)
+	  processAddChar(' ');
 	
         char cString[4];
-	sprintf(cString, "%d", value);
+	sprintf(cString, "%d", c);
 	processAddString(cString, sizeof(cString) / sizeof(char));
-	processAddChar(' ');
+        addWhitespace = TRUE;
 	
 	c = fgetc(file);
       }
+      whitespace = FALSE;
     }
 
     else if(c == '`') {
