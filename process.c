@@ -7,6 +7,7 @@ void processFile(FILE * file);
 
 bool isWhitespace(char c); //not including newlines
 void processAddChar(char c);
+void processAddString(char * string, int maxLen);
 
 //OutStreams
 void processedProgramPutc(int c, void * data);
@@ -64,6 +65,19 @@ void processFile(FILE * file)
       while(c != EOF && c != '\n')
 	c = fgetc(file);
     }
+    else if(c == '"') {
+      c = fgetc(file);
+      while(c != EOF && c != '"') {
+	lineIsEmpty = FALSE;
+	
+        char cString[4];
+	sprintf(cString, "%d", c);
+	processAddString(cString, sizeof(cString) / sizeof(char));
+	processAddChar(' ');
+	
+	c = fgetc(file);
+      }
+    }
     else {
       if(whitespace == TRUE && !lineIsEmpty)
 	processAddChar(' ');
@@ -96,6 +110,16 @@ bool isWhitespace(char c)
 void processAddChar(char c)
 {
   sputc(c, currentOutStream);
+}
+
+void processAddString(char * string, int maxLen) {
+  int i;
+  for(i = 0; i < maxLen; i++) {
+    char c = string[i];
+    if(c == 0)
+      return;
+    processAddChar(c);
+  }
 }
 
 

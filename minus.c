@@ -16,9 +16,10 @@ int main(int argc, char * argv[])
   file = fopen(argv[1], "r");
   if(file == NULL)
     error("Couldn't open file!\n");
-  
   process(file);
   fclose(file);
+
+  //printf("%s\n\n", processedProgram);
   
   runInit();
   while(1)
