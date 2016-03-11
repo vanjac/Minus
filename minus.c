@@ -3,9 +3,6 @@
 #include "minus.h"
 
 
-FILE * readFile(char * fileName);
-
-
 int main(int argc, char * argv[])
 {
   processedProgram = NULL;
@@ -15,7 +12,11 @@ int main(int argc, char * argv[])
     error("Minus takes a single argument: the program file to run.\n");
   }
   
-  FILE * file = readFile(argv[1]);
+  FILE * file;
+  file = fopen(argv[1], "r");
+  if(file == NULL)
+    error("Couldn't open file!\n");
+  
   process(file);
   fclose(file);
   
@@ -24,16 +25,6 @@ int main(int argc, char * argv[])
     runStep();
   
 }
-
-FILE * readFile(char * fileName)
-{
-  FILE * file;
-  file = fopen(fileName, "r");
-  if(file == NULL)
-    error("Couldn't open file!\n");
-  return file;
-}
-
 
 
 void closeAll()

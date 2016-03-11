@@ -14,11 +14,11 @@ void processedProgramStream(OutStream * stream);
 
 
 OutStream currentOutStream;
+
 //preprocessor state
 bool whitespace;
 bool newline;
 bool lineIsEmpty;
-bool inComment;
 
 
 void process(FILE * file)
@@ -27,15 +27,16 @@ void process(FILE * file)
     PROCESSED_PROGRAM_BLOCK;
   processedProgram =
     (char *) malloc(processedProgramMaxSize * sizeof(char));
-  if(processedProgram == NULL)
+  if(processedProgram == NULL) {
     error("Couldn't allocate preprocess memory!\n");
+    return;
+  }
   processedProgramSize = 0;
 
 
   whitespace = TRUE;
   newline = TRUE;
   lineIsEmpty = TRUE;
-  inComment = FALSE;
   processedProgramStream(&currentOutStream);
 
   processFile(file);
@@ -50,22 +51,18 @@ void processFile(FILE * file)
 {
   int c;
   while((c = fgetc(file)) != EOF) {
-    if(inComment) {
-      if(c == '\n')
-	inComment = FALSE;
-    }
-    else if(isWhitespace(c)) {
+    if(isWhitespace(c)) {
       whitespace = TRUE;
     }
     else if(c == '\n') {
       if(!lineIsEmpty)
 	processAddChar('\n');
-      inComment = FALSE;
       newline = TRUE;
       lineIsEmpty = TRUE;
     }
     else if(c == '#' && lineIsEmpty) {
-      inComment = TRUE;
+      while(c != EOF && c != '\n')
+	c = fgetc(file);
     }
     else {
       if(whitespace == TRUE && !lineIsEmpty)
