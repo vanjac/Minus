@@ -1,8 +1,15 @@
 #include "minus.h"
 #include "stream.h"
 
-void processAddChar(char c);
 bool isWhitespace(char c); //not including newlines
+void processAddChar(char c);
+
+//OutStreams
+void processedProgramPutc(int c, void * data);
+void processedProgramStream(OutStream * stream);
+
+OutStream currentOutStream;
+
 
 void process()
 {
@@ -14,6 +21,9 @@ void process()
     error("Couldn't allocate preprocess memory!\n");
   processedProgramSize = 0;
 
+  processedProgramStream(&currentOutStream);
+  
+  
   bool whitespace = TRUE;
   bool newline = TRUE;
   bool lineIsEmpty = TRUE;
@@ -56,7 +66,30 @@ void process()
   processAddChar(0);
 }
 
+bool isWhitespace(char c)
+{
+  switch(c) {
+  case ' ':
+    return TRUE;
+  case '\t':
+    return TRUE;
+  case '(':
+    return TRUE;
+  case ')':
+      return TRUE;
+  default:
+    return FALSE;
+  }
+}
+
 void processAddChar(char c)
+{
+  sputc(c, currentOutStream);
+}
+
+
+
+void processedProgramPutc(int c, void * data)
 {
   if(processedProgramSize >= processedProgramMaxSize) {
     processedProgramMaxSize +=
@@ -71,17 +104,8 @@ void processAddChar(char c)
   processedProgramSize++;
 }
 
-bool isWhitespace(char c) {
-  switch(c) {
-  case ' ':
-    return TRUE;
-  case '\t':
-    return TRUE;
-  case '(':
-    return TRUE;
-  case ')':
-      return TRUE;
-  default:
-    return FALSE;
-  }
+void processedProgramStream(OutStream * stream)
+{
+  (*stream).putchar = &processedProgramPutc;
+  (*stream).data = NULL;
 }
