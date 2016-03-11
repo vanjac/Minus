@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 //maximum characters in a word
 #define WORD_SIZE 1024
@@ -31,8 +32,6 @@ typedef struct {
   unsigned int numVars;
 } NamespaceState;
 
-char * originalProgram;
-unsigned int originalProgramSize;
 char * processedProgram;
 unsigned int processedProgramSize;
 unsigned int processedProgramMaxSize; //size of allocated memory
@@ -55,7 +54,7 @@ void error();
 void programError();
 void halt();
 
-void process();
+void process(FILE * file);
 void runInit();
 void runStep();
 

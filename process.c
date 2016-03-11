@@ -1,5 +1,9 @@
+#include <stdio.h>
+
 #include "minus.h"
 #include "stream.h"
+
+void processFile(FILE * file);
 
 bool isWhitespace(char c); //not including newlines
 void processAddChar(char c);
@@ -8,10 +12,16 @@ void processAddChar(char c);
 void processedProgramPutc(int c, void * data);
 void processedProgramStream(OutStream * stream);
 
+
 OutStream currentOutStream;
+//preprocessor state
+bool whitespace;
+bool newline;
+bool lineIsEmpty;
+bool inComment;
 
 
-void process()
+void process(FILE * file)
 {
   processedProgramMaxSize =
     PROCESSED_PROGRAM_BLOCK;
@@ -21,17 +31,25 @@ void process()
     error("Couldn't allocate preprocess memory!\n");
   processedProgramSize = 0;
 
+
+  whitespace = TRUE;
+  newline = TRUE;
+  lineIsEmpty = TRUE;
+  inComment = FALSE;
   processedProgramStream(&currentOutStream);
+
+  processFile(file);
+
+  if(!lineIsEmpty)
+    processAddChar('\n'); // end with a newline
   
-  
-  bool whitespace = TRUE;
-  bool newline = TRUE;
-  bool lineIsEmpty = TRUE;
-  bool inComment = FALSE;
-  int i;
-  for(i = 0; i < originalProgramSize; i++) {
-    char c = originalProgram[i];
-    
+  processAddChar(0);
+}
+
+void processFile(FILE * file)
+{
+  int c;
+  while((c = fgetc(file)) != EOF) {
     if(inComment) {
       if(c == '\n')
 	inComment = FALSE;
@@ -59,12 +77,8 @@ void process()
     }
 	
   }
-
-  if(!lineIsEmpty)
-    processAddChar('\n'); // end with a newline
-  
-  processAddChar(0);
 }
+
 
 bool isWhitespace(char c)
 {

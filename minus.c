@@ -3,12 +3,11 @@
 #include "minus.h"
 
 
-void readFile(char * fileName);
+FILE * readFile(char * fileName);
 
 
 int main(int argc, char * argv[])
 {
-  originalProgram = NULL;
   processedProgram = NULL;
   stack = NULL;
 
@@ -16,48 +15,29 @@ int main(int argc, char * argv[])
     error("Minus takes a single argument: the program file to run.\n");
   }
   
-  readFile(argv[1]);
-  process();
+  FILE * file = readFile(argv[1]);
+  process(file);
+  fclose(file);
+  
   runInit();
   while(1)
     runStep();
   
 }
 
-void readFile(char * fileName)
+FILE * readFile(char * fileName)
 {
   FILE * file;
   file = fopen(fileName, "r");
   if(file == NULL)
     error("Couldn't open file!\n");
-  
-  fseek(file, 0L, SEEK_END);
-  int size = (int)ftell(file);
-  originalProgramSize = size;
-  // return to original position
-  fseek(file, 0L, SEEK_SET);
-
-  
-  originalProgram = (char *)malloc(size*sizeof(char));
-  if(originalProgram == NULL) {
-    fclose(file);
-    error("Couldn't allocate memory!\n");
-  }
-
-  if( fread(originalProgram, sizeof(char), size, file) != size) {
-    fclose(file);
-    error("Error reading file!\n");
-  }
-
-  fclose(file);
+  return file;
 }
 
 
 
 void closeAll()
 {
-  if(originalProgram != NULL)
-    free(originalProgram);
   if(processedProgram != NULL)
     free(processedProgram);
   if(stack != NULL)
