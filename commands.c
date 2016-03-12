@@ -3,8 +3,6 @@
 
 #include "minus.h"
 
-bool isNumber(char c); //if this could be the start of a number
-                       //includes '-' and '.'
 bool isDigit(char c);
 bool isLetter(char c);
 
@@ -58,7 +56,7 @@ void command()
     }
   }
   
-  if(isNumber(FIRST_WORD_CHAR) && isDigit(LAST_WORD_CHAR)) {
+  if(isDigit(FIRST_WORD_CHAR)) {
     Number n = strtod(word, NULL);
     stackPush(n);
     return;
@@ -198,11 +196,6 @@ void command()
   
   programError("Unknown word!\n");
   
-}
-
-bool isNumber(char c)
-{
-  return isDigit(c) || c == '-' || c == '.';
 }
 
 bool isDigit(char c)

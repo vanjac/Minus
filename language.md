@@ -15,7 +15,7 @@ Before being run, a Minus program is preprocessed. The main purpose of the Minus
 
 ##Minus Commands
 Once a Minus program has been preprocessed, execution begins starting with the first line of the program. These are the words understood by the interpreter.
-- `123` adds the number 123 to the stack. Numbers can optionally begin with a negative sign, and can have an optional decimal point in them.
+- `123` adds the number 123 to the stack. Numbers cannot contain negative signs or decimal points.
 - `;` removes the top number on the stack.
 - `+varName` creates a variable named `varName` in the current namespace, and sets its value to the top number on the stack, without removing it. Two variables of the same name cannot exist in the same namespace, but can exist in different namespaces - in this case, the variable in the highest-numbered namespace is used.
 - `=varName` sets the value of an already-existing variable to the top number on the stack, without removing it.
