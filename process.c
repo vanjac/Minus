@@ -17,7 +17,6 @@ void process(FILE * file)
 
 
   whitespace = TRUE;
-  newline = TRUE;
   lineIsEmpty = TRUE;
   processedProgramStream(&currentOutStream);
 
@@ -28,6 +27,7 @@ void process(FILE * file)
   
   processAddChar(0);
 }
+
 
 void processFile(FILE * file)
 {
@@ -41,7 +41,6 @@ void processFile(FILE * file)
     else if(c == '\n') {
       if(!lineIsEmpty)
 	processAddChar('\n');
-      newline = TRUE;
       lineIsEmpty = TRUE;
     }
     
@@ -72,7 +71,7 @@ void processFile(FILE * file)
       whitespace = FALSE;
     }
 
-    else if(c == '`') {
+    else if(c == '`' && lineIsEmpty) {
       char fileName[256];
       int i;
       for(i = 0; i < sizeof(fileName)/sizeof(char) - 1; i++) {
@@ -92,7 +91,6 @@ void processFile(FILE * file)
       if(whitespace == TRUE && !lineIsEmpty)
 	processAddChar(' ');
       whitespace = FALSE;
-      newline = FALSE;
       lineIsEmpty = FALSE;
       processAddChar(c);
     }

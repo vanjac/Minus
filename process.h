@@ -5,6 +5,13 @@ typedef struct {
   void * data;
 } OutStream;
 
+typedef struct {
+  char name[64];
+  char * value; //null-terminated
+  int valueSize; //size of allocated memory
+} Keyword;
+
+
 void sputc(int c, OutStream out);
 void processAddChar(char c);
 void processAddString(char * string, int maxLen);
