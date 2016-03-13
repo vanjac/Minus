@@ -33,5 +33,4 @@ OutStream currentOutStream;
 
 //preprocessor state
 bool whitespace;
-bool newline;
 bool lineIsEmpty;
