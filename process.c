@@ -1,27 +1,6 @@
 #include <stdio.h>
 
-#include "minus.h"
-#include "stream.h"
-
-void processFile(FILE * file);
-
-bool isWhitespace(char c); //not including newlines
-bool isHex(char c); //is hex code
-char getHex(char c); //get hex value of character
-void processAddChar(char c);
-void processAddString(char * string, int maxLen);
-
-//OutStreams
-void processedProgramPutc(int c, void * data);
-void processedProgramStream(OutStream * stream);
-
-
-OutStream currentOutStream;
-
-//preprocessor state
-bool whitespace;
-bool newline;
-bool lineIsEmpty;
+#include "process.h"
 
 
 void process(FILE * file)
@@ -152,6 +131,12 @@ char getHex(char c)
   return -1;
 }
 
+
+
+void sputc(int c, OutStream out)
+{
+  (*(out.putchar))(c, out.data);
+}
 
 void processAddChar(char c)
 {
