@@ -24,17 +24,19 @@ void commandInit()
 
 void command()
 {
+  char firstChar = word[0];
+  
   if(wordLength == 0)
     return;
 
   if(state == BRACKET_SKIP) {
-    if(FIRST_WORD_CHAR == ']')
+    if(firstChar == ']')
       state = READ;
     return;
   }
 
   if(state == BRACKET_SEARCH) {
-    switch(FIRST_WORD_CHAR) {
+    switch(firstChar) {
     case '{':
       searchNamespace++;
       return;
@@ -55,13 +57,14 @@ void command()
       return;
     }
   }
+
   
-  if(isDigit(FIRST_WORD_CHAR)) {
+  if(isDigit(firstChar)) {
     Number n = strtod(word, NULL);
     stackPush(n);
     return;
   }
-  if(isLetter(FIRST_WORD_CHAR)) {
+  if(isLetter(firstChar)) {
     Variable * var = findVar(word);
     if(var == NULL) {
       programError("Variable doesn't exist!\n");
@@ -71,11 +74,10 @@ void command()
     return;
   }
   
-
   Number a, b, c;
   int i;
   
-  switch(FIRST_WORD_CHAR) {
+  switch(firstChar) {
   
   case ';':
     stackPopTest();
@@ -98,9 +100,7 @@ void command()
   case ':': // set LOCATION to VALUE
     a = stackPopTest();
     b = stackPeekTest();
-    if(a <= 0) {
-      return;
-    } else if(a == 1) {
+    if(a == 1) {
       putchar(b);
       return;
     } else if(a == 2) {
@@ -136,11 +136,9 @@ void command()
     return;
 
   case ',':
-    if(wordLength == 1) {
-      a = stackPeekTest();
-      free( numberToPointer(a) );
-      return;
-    }
+    a = stackPeekTest();
+    free( numberToPointer(a) );
+    return;
 
   case '{':
     incNamespace();
@@ -148,6 +146,7 @@ void command()
     lastNamespacePosition = position;
     state = BRACKET_SEARCH;
     return;
+    
   case '}':
     decNamespace();
     return;
@@ -156,6 +155,7 @@ void command()
     a = stackPeekTest();
     makeVar(word + 1, a);
     return;
+    
   case '=':
     a = stackPeekTest();
     Variable * v = findVar(word + 1);

@@ -15,9 +15,6 @@
 //max variables in a namespace
 #define MAX_VARS 256
 
-#define FIRST_WORD_CHAR (word[0])
-#define LAST_WORD_CHAR (word[wordLength-1])
-
 typedef enum { FALSE = 0, TRUE } bool;
 typedef double Number;
 typedef unsigned char Namespace;
