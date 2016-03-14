@@ -2,14 +2,14 @@
 #include <stdio.h>
 
 //maximum characters in a word
-#define WORD_SIZE 1024
+#define WORD_SIZE 4096
 
 //size of memory allocated at once
-#define PROCESSED_PROGRAM_BLOCK 1024
-#define STACK_BLOCK 256
+#define PROCESSED_PROGRAM_BLOCK 2048
+#define STACK_BLOCK 2048
 
-//max items in the stack -- could limit recursion
-#define MAX_STACK_SIZE 2048
+//max items in the stack -- could limit recursion or string lengths
+#define MAX_STACK_SIZE 131072
 //max namespaces -- could limit recursion
 #define MAX_NAMESPACES 256
 //max variables in a namespace
