@@ -1,17 +1,9 @@
 #include "minus.h"
 
-#define KEYWORD_NAME_LEN 64
-
 typedef struct {
   void (*putchar)(int c, void * data);
   void * data;
 } OutStream;
-
-typedef struct {
-  char name[KEYWORD_NAME_LEN];
-  char * value; //null-terminated
-  int valueSize; //size of allocated memory
-} Keyword;
 
 
 void sputc(int c, OutStream out);

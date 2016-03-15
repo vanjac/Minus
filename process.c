@@ -14,16 +14,12 @@ void process(FILE * file)
     return;
   }
   processedProgramSize = 0;
-
-
+  
   whitespace = TRUE;
   lineIsEmpty = TRUE;
   processedProgramStream(&currentOutStream);
 
   processFile(file);
-
-  if(!lineIsEmpty)
-    processAddChar('\n'); // end with a newline
   
   processAddChar(0);
 }
@@ -86,6 +82,10 @@ void processFile(FILE * file)
       FILE * newFile = readFile(fileName);
       processFile(newFile);
     }
+
+    else if(c == '$' && lineIsEmpty) {
+      
+    }
     
     else {
       if(whitespace == TRUE && !lineIsEmpty)
@@ -96,6 +96,9 @@ void processFile(FILE * file)
     }
 	
   }
+
+  if(!lineIsEmpty)
+    processAddChar('\n'); // end with a newline
 }
 
 
