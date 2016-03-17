@@ -89,7 +89,6 @@ void processFile(FILE * file)
       if(inKeyword) { //complete the current keyword
 	Keyword * kPtr = (Keyword *)(currentOutStream.data);
 	Keyword k = *kPtr;
-	printf("Keyword: %s, value: %s\n", k.name, k.value);
 	processedProgramStream(&currentOutStream);
 	inKeyword = FALSE;
       } else { // not in keyword, start a new one
@@ -120,8 +119,6 @@ void processFile(FILE * file)
 
         keywordStream(k, &currentOutStream);
 	inKeyword = TRUE;
-	printf("Keyword started...\n");
-      
 
 	whitespace = FALSE;
 	lineIsEmpty = FALSE;
