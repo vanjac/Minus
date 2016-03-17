@@ -27,6 +27,8 @@ void process(FILE * file)
 
 void processFile(FILE * file)
 {
+  bool inKeyword = FALSE;
+  
   int c;
   while((c = fgetc(file)) != EOF) {
     
@@ -83,8 +85,47 @@ void processFile(FILE * file)
       processFile(newFile);
     }
 
-    else if(c == '$' && lineIsEmpty) {
+    else if(c == '$') {
+      if(inKeyword) { //complete the current keyword
+	Keyword * kPtr = (Keyword *)(currentOutStream.data);
+	Keyword k = *kPtr;
+	printf("Keyword: %s, value: %s\n", k.name, k.value);
+	processedProgramStream(&currentOutStream);
+	inKeyword = FALSE;
+      } else { // not in keyword, start a new one
+	//allocate memory for a new keyword...
+	if(numKeywords >= MAX_KEYWORDS)
+	  error("Max keywords reached!");
+	if(numKeywords >= keywordsSize) {
+	  keywordsSize += KEYWORD_BLOCK;
+	  keywords = (Keyword *)realloc(keywords,
+					keywordsSize * sizeof(Keyword));
+	  if(keywords == NULL)
+	    error("Couldn't allocate keyword memory!");
+	}
+	numKeywords++;
+
+	Keyword * k = &keywords[numKeywords - 1];
+
+	int i = 0;
+	char c;
+	while((c = fgetc(file)) != EOF
+	      && !isWhitespace(c)
+	      && c != '\n') {
+	  if(i >= KEYWORD_NAME_LEN)
+	    error("Keyword name too long!");
+	  (*k).name[i++] = c;
+	}
+	(*k).name[i] = 0;
+
+        keywordStream(k, &currentOutStream);
+	inKeyword = TRUE;
+	printf("Keyword started...\n");
       
+
+	whitespace = FALSE;
+	lineIsEmpty = FALSE;
+      }
     }
     
     else {
@@ -97,8 +138,10 @@ void processFile(FILE * file)
 	
   }
 
-  if(!lineIsEmpty)
+  if(!lineIsEmpty) {
     processAddChar('\n'); // end with a newline
+    lineIsEmpty = TRUE;
+  }
 }
 
 
@@ -175,4 +218,25 @@ void processedProgramStream(OutStream * stream)
 {
   (*stream).putchar = &processedProgramPutc;
   (*stream).data = NULL;
+}
+
+
+void keywordPutc(int c, void * data)
+{
+  Keyword * k = (Keyword *)data;
+  if((*k).valueSize >= (*k).valueMaxSize) {
+    (*k).valueMaxSize += KEYWORD_VALUE_BLOCK;
+    (*k).value = realloc((*k).value, (*k).valueMaxSize * sizeof(char));
+    if((*k).value == NULL)
+      error("Couldn't allocate keyword memory!\n");
+  }
+
+  (*k).value[(*k).valueSize] = c;
+  (*k).valueSize++;
+}
+
+void keywordStream(Keyword * k, OutStream * stream)
+{
+  (*stream).putchar = &keywordPutc;
+  (*stream).data = (void *)k;
 }

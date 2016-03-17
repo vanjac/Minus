@@ -22,6 +22,9 @@ void processAddString(char * string, int maxLen);
 void processedProgramPutc(int c, void * data);
 void processedProgramStream(OutStream * stream);
 
+void keywordPutc(int c, void * data);
+void keywordStream(Keyword * k, OutStream * stream);
+
 
 OutStream currentOutStream;
 

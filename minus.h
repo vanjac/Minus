@@ -17,6 +17,8 @@
 
 #define KEYWORD_NAME_LEN 64
 #define KEYWORD_BLOCK 64 //num keywords allocated at a time
+#define KEYWORD_VALUE_BLOCK 256 //characters in the value allocated at a time
+#define MAX_KEYWORDS 4096
 
 typedef enum { FALSE = 0, TRUE } bool;
 typedef double Number;
@@ -35,7 +37,8 @@ typedef struct {
 typedef struct {
   char name[KEYWORD_NAME_LEN];
   char * value; //null-terminated
-  int valueSize; //size of allocated memory
+  unsigned int valueSize; //length of string
+  unsigned int valueMaxSize;
 } Keyword;
 
 char * processedProgram;
