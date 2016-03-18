@@ -95,6 +95,9 @@ void command()
     bool result = nextWord();
     if(!result)
       halt();
+    result = nextWord();
+    if(!result)
+      halt();
     return;
 
   case ':': // set LOCATION to VALUE
