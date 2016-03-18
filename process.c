@@ -52,11 +52,7 @@ void processFile(FILE * file)
     }
     
     else if(c == '"') {
-      if(whitespace == TRUE && !lineIsEmpty) {
-	flushWord(wordLen);
-	wordLen = 0;
-	processAddChar(' ');
-      }
+      flushWhitespace(&wordLen);
       
       c = fgetc(file);
       bool addWhitespace = FALSE;
@@ -94,11 +90,7 @@ void processFile(FILE * file)
 
     else if(c == '$') {
       if(inKeyword) { //complete the current keyword
-	if(whitespace == TRUE && !lineIsEmpty) {
-	  flushWord(wordLen);
-	  wordLen = 0;
-	  processAddChar(' ');
-	}
+        flushWhitespace(&wordLen);
 	
 	Keyword * kPtr = (Keyword *)(currentOutStream.data);
 	Keyword k = *kPtr;
@@ -142,11 +134,7 @@ void processFile(FILE * file)
     }
     
     else {
-      if(whitespace == TRUE && !lineIsEmpty) {
-	flushWord(wordLen);
-	wordLen = 0;
-	processAddChar(' ');
-      }
+      flushWhitespace(&wordLen);
       whitespace = FALSE;
       lineIsEmpty = FALSE;
 
@@ -165,10 +153,34 @@ void processFile(FILE * file)
 }
 
 
+void flushWhitespace(int * wordLen)
+{
+  if(whitespace == TRUE && !lineIsEmpty) {
+    flushWord(*wordLen);
+    *wordLen = 0;
+    processAddChar(' ');
+  }
+}
+
 void flushWord(wordLen)
 {
   word[wordLen] = 0;
-  processAddString(word, WORD_SIZE);
+  unsigned long hash = stringHash(word, wordLen);
+  int i;
+  bool matchFound = FALSE;
+  Keyword match;
+  for(i = 0; i < numKeywords; i++) {
+    Keyword k = keywords[i];
+    if(k.nameHash == hash) {
+      matchFound = TRUE;
+      match = k;
+    }
+  }
+
+  if(matchFound)
+    processAddString(match.value, match.valueSize);
+  else
+    processAddString(word, WORD_SIZE);
 }
 
 
