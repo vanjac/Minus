@@ -35,7 +35,7 @@ typedef struct {
 } NamespaceState;
 
 typedef struct {
-  char name[KEYWORD_NAME_LEN];
+  unsigned long nameHash;
   char * value; //null-terminated
   unsigned int valueSize; //length of string
   unsigned int valueMaxSize;

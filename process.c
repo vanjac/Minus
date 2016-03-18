@@ -28,6 +28,7 @@ void process(FILE * file)
 void processFile(FILE * file)
 {
   bool inKeyword = FALSE;
+  int wordLen = 0;
   
   int c;
   while((c = fgetc(file)) != EOF) {
@@ -37,8 +38,11 @@ void processFile(FILE * file)
     }
     
     else if(c == '\n') {
-      if(!lineIsEmpty)
+      if(!lineIsEmpty) {
+	flushWord(wordLen);
+	wordLen = 0;
 	processAddChar('\n');
+      }
       lineIsEmpty = TRUE;
     }
     
@@ -48,8 +52,11 @@ void processFile(FILE * file)
     }
     
     else if(c == '"') {
-      if(whitespace == TRUE && !lineIsEmpty)
+      if(whitespace == TRUE && !lineIsEmpty) {
+	flushWord(wordLen);
+	wordLen = 0;
 	processAddChar(' ');
+      }
       
       c = fgetc(file);
       bool addWhitespace = FALSE;
@@ -87,6 +94,12 @@ void processFile(FILE * file)
 
     else if(c == '$') {
       if(inKeyword) { //complete the current keyword
+	if(whitespace == TRUE && !lineIsEmpty) {
+	  flushWord(wordLen);
+	  wordLen = 0;
+	  processAddChar(' ');
+	}
+	
 	Keyword * kPtr = (Keyword *)(currentOutStream.data);
 	Keyword k = *kPtr;
 	processedProgramStream(&currentOutStream);
@@ -106,6 +119,8 @@ void processFile(FILE * file)
 
 	Keyword * k = &keywords[numKeywords - 1];
 
+	//get name
+	char name[KEYWORD_NAME_LEN];
 	int i = 0;
 	char c;
 	while((c = fgetc(file)) != EOF
@@ -113,9 +128,10 @@ void processFile(FILE * file)
 	      && c != '\n') {
 	  if(i >= KEYWORD_NAME_LEN)
 	    error("Keyword name too long!");
-	  (*k).name[i++] = c;
+	  name[i++] = c;
 	}
-	(*k).name[i] = 0;
+	name[i] = 0;
+	(*k).nameHash = stringHash(name, i);
 
         keywordStream(k, &currentOutStream);
 	inKeyword = TRUE;
@@ -126,19 +142,33 @@ void processFile(FILE * file)
     }
     
     else {
-      if(whitespace == TRUE && !lineIsEmpty)
+      if(whitespace == TRUE && !lineIsEmpty) {
+	flushWord(wordLen);
+	wordLen = 0;
 	processAddChar(' ');
+      }
       whitespace = FALSE;
       lineIsEmpty = FALSE;
-      processAddChar(c);
+
+      if(wordLen >= WORD_SIZE)
+	error("Maximum word size reached!");
+      word[wordLen++] = c;
     }
 	
   }
 
   if(!lineIsEmpty) {
+    flushWord(wordLen);
     processAddChar('\n'); // end with a newline
     lineIsEmpty = TRUE;
   }
+}
+
+
+void flushWord(wordLen)
+{
+  word[wordLen] = 0;
+  processAddString(word, WORD_SIZE);
 }
 
 

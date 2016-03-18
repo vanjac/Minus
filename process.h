@@ -6,6 +6,8 @@ typedef struct {
 } OutStream;
 
 
+void flushWord();
+
 void sputc(int c, OutStream out);
 void processAddChar(char c);
 void processAddString(char * string, int maxLen);
