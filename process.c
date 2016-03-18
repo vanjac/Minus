@@ -90,12 +90,14 @@ void processFile(FILE * file)
 
     else if(c == '$') {
       if(inKeyword) { //complete the current keyword
-        flushWhitespace(&wordLen);
+        flushWord(wordLen);
+	wordLen = 0;
 	
 	Keyword * kPtr = (Keyword *)(currentOutStream.data);
 	Keyword k = *kPtr;
 	processedProgramStream(&currentOutStream);
 	inKeyword = FALSE;
+	lineIsEmpty = TRUE;
       } else { // not in keyword, start a new one
 	//allocate memory for a new keyword...
 	if(numKeywords >= MAX_KEYWORDS)
