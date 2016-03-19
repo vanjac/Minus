@@ -15,16 +15,16 @@ Before being run, a Minus program is preprocessed. The main purpose of the Minus
 
 ##Minus Commands
 Once a Minus program has been preprocessed, execution begins starting with the first line of the program. These are the words understood by the interpreter.
-- `123` adds the number 123 to the stack. Numbers cannot begin with a negative sign or decimal point.
+- `123` adds the number 123 to the stack. Numbers are any string of digits, with no negative signs or decimal points.
 - `;` removes the top number on the stack.
-- `+varName` creates a variable named `varName` in the current namespace, and sets its value to the top number on the stack, without removing it. Two variables of the same name cannot exist in the same namespace, but can exist in different namespaces - in this case, the variable in the highest-numbered namespace is used.
+- `+varName` creates a variable named `varName` in the current namespace, and sets its value to the top number on the stack, without removing it. Two variables of the same name cannot exist in the same namespace, but can exist in different namespaces - in this case, the variable in the highest-numbered namespace is used. Variable names must start with a letter or underscore.
 - `=varName` sets the value of an already-existing variable to the top number on the stack, without removing it.
 - `varName` adds the value of the variable to the stack.
 - `{` increments the namespace counter by 1. Before execution continues, bracketed lines are searched for in the current namespace (but not subnamespaces) and executed - see below.
 - `}` decrements the namespace counter by 1, and deletes all variables associated with the namespace.
 - `[` and `]` characters mark the beginning and end of code that should be run before anything else in the namespace. Once execution actually reaches this point, these sections are skipped. There can be any number of these sections in a namespace.
 - `@` adds the program counter position to the stack.
-- `!` removes the top number on the stack and sets the program counter to that position. The first word there is skipped before execution continues.
+- `!` removes the top number on the stack and sets the program counter to that position. The first two words there are skipped before execution continues.
 - `-` removes two stack items and subtracts the second from the first. The result is then added to the stack.
 - `/` removes two stack items and divides the first by the second. The result is then added to the stack.
 - `%` removes two stack items and finds the remainder when the first is divided by the second. The result is then added to the stack.

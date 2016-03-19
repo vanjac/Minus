@@ -4,7 +4,7 @@
 #include "minus.h"
 
 bool isDigit(char c);
-bool isLetter(char c);
+bool isStartOfVarName(char c);
 
 int lastNamespacePosition;
 Namespace searchNamespace;
@@ -64,7 +64,7 @@ void command()
     stackPush(n);
     return;
   }
-  if(isLetter(firstChar)) {
+  if(isStartOfVarName(firstChar)) {
     Variable * var = findVar(word);
     if(var == NULL) {
       programError("Variable doesn't exist!\n");
@@ -206,8 +206,8 @@ bool isDigit(char c)
   return (c >= '0') && (c <= '9');
 }
 
-bool isLetter(char c)
+bool isStartOfVarName(char c)
 {
-  return ((c >= 'a') && (c <= 'z')) || ((c >= 'A') && (c <= 'Z'));
+  return ((c >= 'a') && (c <= 'z')) || ((c >= 'A') && (c <= 'Z')) || c == '_';
 }
 
