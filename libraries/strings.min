@@ -5,4 +5,4 @@ $\n 10 $
 $\r 13 $
 $\t 9 $
 $\v 11 $
-$printStr endwhile ; =c ; : 1 c while != c 0 do ; +c $
+$printStr 0 endwhile ; =c ; : 1 c while != c 0 do ; +c $
