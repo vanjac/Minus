@@ -36,7 +36,7 @@ void initAll()
 {
   processedProgram = NULL;
   stack = NULL;
-  keywords = NULL;
+  processInit();
 }
 
 void closeAll()
@@ -45,15 +45,7 @@ void closeAll()
     free(processedProgram);
   if(stack != NULL)
     free(stack);
-  if(keywords != NULL) {
-    int i;
-    for(i = 0; i < numKeywords; i++) {
-      Keyword k = keywords[i];
-      if(k.value != NULL)
-	free(k.value);
-    }
-    free(keywords);
-  }
+  processClose();
 }
 
 void error(char * message)

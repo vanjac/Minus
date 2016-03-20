@@ -3,6 +3,11 @@
 #include "process.h"
 
 
+void processInit()
+{
+  keywords = NULL;
+}
+
 void process(FILE * file)
 {
   processedProgramMaxSize =
@@ -22,8 +27,22 @@ void process(FILE * file)
   processFile(file);
   
   processAddChar(0);
+  processClose();
 }
 
+void processClose()
+{
+  if(keywords != NULL) {
+    int i;
+    for(i = 0; i < numKeywords; i++) {
+      Keyword k = keywords[i];
+      if(k.value != NULL)
+	free(k.value);
+    }
+    free(keywords);
+    keywords = NULL;
+  }
+}
 
 void processFile(FILE * file)
 {
@@ -86,6 +105,7 @@ void processFile(FILE * file)
       fileName[sizeof(fileName)/sizeof(char)-1] = 0;
       FILE * newFile = readFile(fileName);
       processFile(newFile);
+      fclose(newFile);
     }
 
     else if(c == '$') {

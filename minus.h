@@ -15,10 +15,6 @@
 //max variables in a namespace
 #define MAX_VARS 256
 
-#define KEYWORD_NAME_LEN 64
-#define KEYWORD_BLOCK 64 //num keywords allocated at a time
-#define KEYWORD_VALUE_BLOCK 256 //characters in the value allocated at a time
-#define MAX_KEYWORDS 4096
 
 typedef enum { FALSE = 0, TRUE } bool;
 typedef double Number;
@@ -34,12 +30,6 @@ typedef struct {
   unsigned int numVars;
 } NamespaceState;
 
-typedef struct {
-  unsigned long nameHash;
-  char * value; //null-terminated
-  unsigned int valueSize; //length of string
-  unsigned int valueMaxSize;
-} Keyword;
 
 char * processedProgram;
 unsigned int processedProgramSize;
@@ -55,10 +45,6 @@ Number * stack;
 unsigned int stackSize; // in Numbers
 unsigned int stackMemorySize;
 
-Keyword * keywords;
-int numKeywords;
-int keywordsSize; //size of allocated memory
-
 
 unsigned long stringHash(unsigned char * string, int length);
 
@@ -70,7 +56,10 @@ void error();
 void programError();
 void halt();
 
+void processInit();
 void process(FILE * file);
+void processClose();
+
 void runInit();
 void runStep();
 
