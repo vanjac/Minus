@@ -64,6 +64,7 @@ unsigned long stringHash(unsigned char * string, int length);
 
 FILE * readFile(char * name);
 
+void initAll();
 void closeAll();
 void error();
 void programError();

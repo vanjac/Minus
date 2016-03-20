@@ -5,9 +5,7 @@
 
 int main(int argc, char * argv[])
 {
-  processedProgram = NULL;
-  stack = NULL;
-  keywords = NULL;
+  initAll();
 
   if(argc != 2) {
     error("Minus takes a single argument: the program file to run.\n");
@@ -34,6 +32,12 @@ FILE * readFile(char * name)
   return file;
 }
 
+void initAll()
+{
+  processedProgram = NULL;
+  stack = NULL;
+  keywords = NULL;
+}
 
 void closeAll()
 {
