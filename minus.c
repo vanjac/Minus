@@ -20,7 +20,6 @@ int main(int argc, char * argv[])
   runInit();
   while(1)
     runStep();
-  
 }
 
 FILE * readFile(char * name)
