@@ -5,4 +5,5 @@ $\n 10 $
 $\r 13 $
 $\t 9 $
 $\v 11 $
-$printStr 0 endwhile ; =c ; : 1 c while != c 0 do ; +c $
+$printStr } 0 endwhile ; =__char__ ; : 1 __char__ while != __char__ 0 do ; +__char__ { $
+$intStr } endif "-" if __neg__ endwhile ; =__num__ - __num__ % __num__ 1 ; =__num__ / __num__ 10 + % __num__ 10 "0" while > __num__ 0 do ; =__num__ - __num__ % __num__ 1 endif ; =__num__ abs __num__ ; =__neg__ 1 if < __num__ 0 ; +__neg__ 0 ; +__num__ { $

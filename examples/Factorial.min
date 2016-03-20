@@ -1,0 +1,25 @@
+`libraries/stdlib.min
+`libraries/strings.min
+
+begin
+
+; +i 1
+while <= i 10 do
+  ; printStr (intStr i) " factorial is " 0
+  ; printStr (intStr (! FactorialRecursive @ i)) \n 0
+  ; =i +1 i
+endwhile
+
+stop
+
+
+def +FactorialRecursive as
+  ; +n ~~ 1
+  if = n 1
+    1
+  else
+    * n (! FactorialRecursive @ (-1 n))
+  endelse
+enddef
+
+end

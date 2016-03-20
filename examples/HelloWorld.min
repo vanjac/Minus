@@ -1,0 +1,8 @@
+`libraries/stdlib.min
+`libraries/strings.min
+
+begin
+
+; printStr "Hello World!" \n 0
+
+end
