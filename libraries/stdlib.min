@@ -33,3 +33,5 @@ $enddef ! } __addr__ $
 $begin { $
 $end ; 0 } ] ; +__end__ @ [ $
 $stop ! __end__ $
+$malloc . $
+$free , $

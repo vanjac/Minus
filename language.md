@@ -10,7 +10,7 @@ Minus programs are sequences of "words," separated by whitespace. These words ar
 Before being run, a Minus program is preprocessed. The main purpose of the Minus preprocessor is to remove unnecessary whitespace - spaces, tabs, newlines, and parenthesis are all considered whitespace (parenthesis have no effect on program flow, they are only for organization). The preprocessor also looks for some other patterns:
 - Lines that begin with a `#` are ignored (commented)
 - Lines that begin with a `$` and follow the pattern `$name value $` are treated as keyword definitions. If `name` (without the leading `$`) is found as a separate word (surrounded by whitespace) anywhere in the program past that point, it will be replaced with `value`. `value` can contain whitespace and even span multiple lines.
-- Lines that begin with a `` ` `` and follow the pattern `` `path/to/file `` are replaced with the contents of the file found at `path/to/file`. File paths follow Unix file path conventions.
+- Lines that begin with a `` ` `` and follow the pattern `` `path/to/file `` are replaced with the contents of the file found at `path/to/file`. File paths follow Unix file path conventions, and are relative to the working directory.
 - Strings surrounded by quotes `"like this"` are replaced with Minus code that adds each character to the stack.
 
 ##Minus Commands
