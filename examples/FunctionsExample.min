@@ -1,0 +1,46 @@
+# include libraries
+
+`libraries/stdlib.min
+`libraries/strings.min
+
+# main function. must be the first line after including libaries
+begin
+
+# call a function with "! FunctionName @ arguments"
+; +aResult (! FunctionA @ 3 2)
+; +bResult (! FunctionB @ 3 2)
+; +cResult (! FunctionC @ 3 2 1)
+
+# the arguments for printStr are a list of strings to print,
+# ending with a 0
+; printStr "FunctionA result is " (intStr aResult) \n 0
+; printStr "FunctionB result is " (intStr bResult) \n 0
+; printStr "FunctionC result is " (intStr cResult) \n 0
+
+stop
+
+# function definitions must be outside the main function
+
+def +FunctionA as
+  # argument list
+  # the number after the ~~ is the number of arguments
+  ; +a ; +b ~~ 2
+  
+  # lines that don't begin with a ; implicitly set the return value
+  # but they don't actually return from the function
+  # the function only returns at the enddef
+  + a b
+enddef
+
+def +FunctionB as
+  ; +a ; +b ~~ 2
+  - a b
+enddef
+
+def +FunctionC as
+  ; +a ; +b ; +c ~~ 3
+  + (+ a b) c
+enddef
+
+# must be the last line of the program
+end
